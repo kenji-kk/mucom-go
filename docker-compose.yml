@@ -6,7 +6,7 @@ services:
     ports:
       - 8080:8080
     container_name: go
-    command: bash -c "cd /app/api && go mod tidy && go run main.go"
+    command: bash -c "cd /app/api/cmd/mucom && go mod tidy && go run main.go"
     depends_on:
       - mysql
     volumes:
