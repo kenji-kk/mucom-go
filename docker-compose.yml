@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  go:
+    build: ./docker/go/
+    ports:
+      - 8080:8080
+    container_name: go
+    command: bash -c "cd /app/api && go mod tidy && go run main.go"
+    depends_on:
+      - mysql
+    volumes:
+      - ./server:/app/api
+  
+  mysql:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: go_database
+      MYSQL_USER: go_grpc
+      MYSQL_PASSWORD: password
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.conf
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql 
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    links:
+      - mysql
+    ports:
+      - 4040:80
+
+networks:
+    default:
+      name: app-network
