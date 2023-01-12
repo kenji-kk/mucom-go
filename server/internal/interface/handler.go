@@ -1,14 +1,14 @@
 package handler
 
-import (
-	"github.com/kenji-kk/mucom-go/server/internal/usecase"
-)
-
-type Handler interface {
+type Handlers interface {
 
 }
 
-type handler struct {
-	ucAuth usecase.AuthUsecase
+type handlers struct {
+	authHandler AuthHandler
+}
+
+func NewHandlers (authHandler AuthHandler) Handlers{
+	return &handlers{authHandler}
 }
 
