@@ -10,7 +10,7 @@ services:
     depends_on:
       - mysql
     volumes:
-      - ./server:/app/api
+      - ./:/app/api/
   
   mysql:
     image: mysql:8.0
