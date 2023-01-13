@@ -7,17 +7,17 @@
 package injection
 
 import (
-	"github.com/kenji-kk/mucom-go/server/internal/interface/handler"
-	"github.com/kenji-kk/mucom-go/server/internal/repository"
-	"github.com/kenji-kk/mucom-go/server/internal/usecase"
+	"github.com/kenji-kk/mucom-go/internal/interface/handler"
+	"github.com/kenji-kk/mucom-go/internal/repository"
+	"github.com/kenji-kk/mucom-go/internal/usecase"
 )
 
 // Injectors from wire.go:
 
-func InitializeHandlers() handler.Handlers {
+func InitializeRootHandlers() handler.RootHandlers {
 	authRepository := repository.NewAuthRepository()
 	authUsecase := usecase.NewAuthUsecase(authRepository)
 	authHandler := handler.NewAuthHandler(authUsecase)
-	handlers := handler.NewHandlers(authHandler)
-	return handlers
+	rootHandlers := handler.NewRootHandlers(authHandler)
+	return rootHandlers
 }

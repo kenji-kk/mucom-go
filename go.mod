@@ -1,4 +1,4 @@
-module github.com/kenji-kk/mucom-go/server
+module github.com/kenji-kk/mucom-go
 
 go 1.17
 

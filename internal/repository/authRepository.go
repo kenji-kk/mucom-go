@@ -1,11 +1,10 @@
 package repository
 
 import (
-	"fmt"
 )
 
 type AuthRepository interface {
-
+	Hello() string
 }
 
 type authRepository struct {
@@ -16,6 +15,6 @@ func NewAuthRepository () AuthRepository {
 	return &authRepository{}
 }
 
-func (a *authRepository) createUser() {
-	fmt.Println("aaa")
+func (reAuth *authRepository) Hello() string{
+	return "Hello World"
 }
