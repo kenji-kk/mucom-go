@@ -1,8 +1,11 @@
 package repository
 
 import (
-	"github.com/kenji-kk/mucom-go/internal/models"
+	"fmt"
 	"github.com/jmoiron/sqlx"
+
+	"github.com/kenji-kk/mucom-go/internal/models"
+	"github.com/kenji-kk/mucom-go/pkg/mysql"
 )
 
 type AuthRepository interface {
@@ -14,8 +17,12 @@ type authRepository struct {
 	db *sqlx.DB
 }
 
-func NewAuthRepository (db *sqlx.DB) AuthRepository {
-	return &authRepository{db: db}
+func NewAuthRepository() AuthRepository {
+	db, err := mysql.NewMysqlDB()
+	if err !=nil {
+		fmt.Println(err)
+	}
+	return &authRepository{db}
 }
 
 func (reAuth *authRepository) Hello() string{

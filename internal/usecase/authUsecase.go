@@ -23,5 +23,6 @@ func (usAuth *authUsecase) Hello() string {
 }
 
 func (usAuth *authUsecase) CreateUser(user *models.User) error {
-	usAuth.reAuth.CreateUser(user)
+	return nil
+	// usAuth.reAuth.CreateUser(user)
 }

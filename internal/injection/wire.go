@@ -7,7 +7,6 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/internal/repository"
 	
-
 	"github.com/google/wire"
 )
 
@@ -22,7 +21,6 @@ func InitializeRootHandlers() handler.RootHandlers {
 
 			// repository
 			repository.NewAuthRepository,
-
 		)
     return nil
 }
