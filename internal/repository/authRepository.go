@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"context"
 	"github.com/jmoiron/sqlx"
 
 	"github.com/kenji-kk/mucom-go/internal/models"
@@ -17,11 +18,7 @@ type authRepository struct {
 	db *sqlx.DB
 }
 
-func NewAuthRepository() AuthRepository {
-	db, err := mysql.NewMysqlDB()
-	if err !=nil {
-		fmt.Println(err)
-	}
+func NewAuthRepository(db *sqlx.DB) AuthRepository {
 	return &authRepository{db}
 }
 
@@ -29,6 +26,7 @@ func (reAuth *authRepository) Hello() string{
 	return "Hello World"
 }
 
-func (reAuth *authRepository) CreateUser(user *models.User) error {
-	return nil
+func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User) error {
+
+	if err := reAuth.db.QueryRowxContext(ctx, )
 }

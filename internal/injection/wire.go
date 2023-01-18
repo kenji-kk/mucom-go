@@ -6,6 +6,7 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/interface/handler"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/internal/repository"
+	"github.com/kenji-kk/mucom-go/pkg/mysql"
 	
 	"github.com/google/wire"
 )
@@ -21,6 +22,9 @@ func InitializeRootHandlers() handler.RootHandlers {
 
 			// repository
 			repository.NewAuthRepository,
+
+			// DB
+			mysql.NewMysqlDB,
 		)
     return nil
 }
