@@ -20,6 +20,11 @@ func NewSomeHandlerInfo(rootHandlers handler.RootHandlers) SomeHandlerInfo {
 			"/",
 			rootHandlers.Hello,
 		},
+		{
+			"POST",
+			"/signup",
+			rootHandlers.Signup,
+		},
 	}
 
 	return someHandlerInfo
