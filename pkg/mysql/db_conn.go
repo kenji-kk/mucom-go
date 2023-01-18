@@ -7,7 +7,7 @@ import (
 )
 
 func NewMysqlDB() (*sqlx.DB) {
-	dataSourceName := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", "go_grpc:password@tcp(mysql:3306)/go_database?charset=utf8&parseTime=true&loc=Asia%2FTokyo")
+	dataSourceName := "go_grpc:password@tcp(mysql:3306)/go_database?charset=utf8&parseTime=true&loc=Asia%2FTokyo"
 
 	db, err := sqlx.Connect("mysql", dataSourceName)
 	if err != nil {
@@ -18,10 +18,10 @@ func NewMysqlDB() (*sqlx.DB) {
 		panic(err)
 	}
 
-	fmt.Println("db接続完了")
+	fmt.Println("success connecting DB")
 
 	cmdU := `CREATE TABLE IF NOT EXISTS users (
-		id UUID PRIMARY KEY AUTO_INCREMENT NOT NULL,
+		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
 		user_name VARCHAR(255) NOT NULL,
 		email VARCHAR(255) UNIQUE,
 		hashed_password LONGBLOB NOT NULL,
