@@ -1,13 +1,15 @@
 package usecase
 
 import (
+	"context"
+
 	"github.com/kenji-kk/mucom-go/internal/repository"
 	"github.com/kenji-kk/mucom-go/internal/models"
 )
 
 type AuthUsecase interface {
 	Hello() string
-	CreateUser(*models.User) error
+	CreateUser(context.Context, *models.User) (*models.User, error)
 }
 
 type authUsecase struct {
@@ -22,7 +24,6 @@ func (usAuth *authUsecase) Hello() string {
 	return usAuth.reAuth.Hello()
 }
 
-func (usAuth *authUsecase) CreateUser(user *models.User) error {
-	return nil
-	// usAuth.reAuth.CreateUser(user)
+func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
+	return usAuth.reAuth.CreateUser(ctx, user)
 }

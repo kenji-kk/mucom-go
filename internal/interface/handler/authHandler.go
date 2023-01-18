@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"context"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/labstack/echo"
 	"github.com/kenji-kk/mucom-go/internal/models"
@@ -27,11 +28,16 @@ func (haAuth *authHandler) Hello(c echo.Context) error {
 }
 
 func (haAuth *authHandler) Signup(c echo.Context) error {
+	ctx := context.Background()
 	user := new(models.User)
 	if err := utils.ReadRequest(c, user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	haAuth.usAuth.CreateUser(user)
-
+	createdUser, err := haAuth.usAuth.CreateUser(ctx, user)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err)
+	}
+	
+	return c.JSON(http.StatusCreated, createdUser)
 }
