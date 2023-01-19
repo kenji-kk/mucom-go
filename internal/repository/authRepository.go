@@ -34,24 +34,27 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 	// salt作成
 	salt, err := GenerateSalt()
 	if err != nil {
-		return u, err
+		return nil, err
 	}
+	user.Salt = salt
 
 	// hashPassword作成
 	toHash := append([]byte(user.Password), salt...)
 	hashedPassword, err := bcrypt.GenerateFromPassword(toHash, bcrypt.DefaultCost)
 	if err != nil {
-		fmt.Printf("An error occurred while creating the hashedPassword: %v\n")
-		return u, err
+		fmt.Print("An error occurred while creating the hashedPassword: %v\n", err)
+		return nil, err
 	}
 	user.HashedPassword = hashedPassword
 
 	// ユーザ作成
-	if err := reAuth.db.QueryRowxContext(ctx, sql.CreateUserQuery, &user.UserName, &user.Email, &user.HashedPassword).StructScan(u); err != nil {
-		fmt.Printf("An error occurred while inserting user-data in DB: %v\n")
-		return u, err
+	if err := reAuth.db.QueryRowxContext(ctx, sql.CreateUserQuery, &user.UserName, &user.Email, &user.Salt, &user.HashedPassword).StructScan(u); err != nil {
+		fmt.Print("An error occurred while inserting user-data in DB: %v\n", err)
+		return nil, err
 	}
-	
+
+	fmt.Println(u)
+
 	return u, nil
 }
 

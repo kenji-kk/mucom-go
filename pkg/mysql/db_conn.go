@@ -2,14 +2,14 @@ package mysql
 
 import (
 	"fmt"
-	"time"
+	_ "github.com/jackc/pgx/v4/stdlib" // pgx driver
 	"github.com/jmoiron/sqlx"
 )
 
 func NewMysqlDB() (*sqlx.DB) {
-	dataSourceName := "go_grpc:password@tcp(mysql:3306)/go_database?charset=utf8&parseTime=true&loc=Asia%2FTokyo"
+	dataSourceName := "host=postgres port=5432 user=postgres dbname=app_db sslmode=disable password=password"
 
-	db, err := sqlx.Connect("mysql", dataSourceName)
+	db, err := sqlx.Connect("pgx", dataSourceName)
 	if err != nil {
 		panic(err)
 	}
@@ -19,37 +19,6 @@ func NewMysqlDB() (*sqlx.DB) {
 	}
 
 	fmt.Println("success connecting DB")
-
-	cmdU := `CREATE TABLE IF NOT EXISTS users (
-		id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-		user_name VARCHAR(255) NOT NULL,
-		email VARCHAR(255) UNIQUE,
-		hashed_password LONGBLOB NOT NULL,
-		salt LONGBLOB NOT NULL,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
-		`
-
-	_, err = db.Exec(cmdU)
-	count := 0
-	if err != nil {
-		for {
-			if err == nil {
-				fmt.Println("")
-				break
-			}
-			fmt.Print(".")
-			time.Sleep(time.Second)
-			count++
-			if count > 180 {
-				fmt.Println("")
-				panic(err)
-			}
-			_, err = db.Exec(cmdU)
-		}
-	}
-	fmt.Println("success creating table")
-
 
 	return db
 }
