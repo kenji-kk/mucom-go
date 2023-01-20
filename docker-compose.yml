@@ -8,35 +8,35 @@ services:
     container_name: go
     command: bash -c "cd /app/api/cmd/mucom && go mod tidy && go run main.go"
     depends_on:
-      - mysql
+      - postgres
     volumes:
       - ./:/app/api/
   
-  mysql:
-    image: mysql:8.0
+  postgres:
+    container_name: postgres
     ports:
-      - 3306:3306
-    container_name: mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: go_database
-      MYSQL_USER: go_grpc
-      MYSQL_PASSWORD: password
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      - "5432:5432"
     volumes:
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.conf
-  
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+      - ./docker/postgres/postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    image: postgres
     environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql 
-      - PMA_USER=root
-      - PMA_PASSWORD=root
-    links:
-      - mysql
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=app_db
+    restart: always
+  
+  pgAdmin4:
+    image: dpage/pgadmin4
+    volumes:
+      - ./docker/postgres/pgadmin4_data:/var/lib/pgadmin
     ports:
-      - 4040:80
+      - "4040:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    depends_on:
+      - postgres
 
 networks:
     default:
