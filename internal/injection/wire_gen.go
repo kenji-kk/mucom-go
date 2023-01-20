@@ -10,12 +10,14 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/interface/handler"
 	"github.com/kenji-kk/mucom-go/internal/repository"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
+	"github.com/kenji-kk/mucom-go/pkg/db/postgres"
 )
 
 // Injectors from wire.go:
 
 func InitializeRootHandlers() handler.RootHandlers {
-	authRepository := repository.NewAuthRepository()
+	db := mysql.NewMysqlDB()
+	authRepository := repository.NewAuthRepository(db)
 	authUsecase := usecase.NewAuthUsecase(authRepository)
 	authHandler := handler.NewAuthHandler(authUsecase)
 	rootHandlers := handler.NewRootHandlers(authHandler)
