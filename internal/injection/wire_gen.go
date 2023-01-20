@@ -10,7 +10,7 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/interface/handler"
 	"github.com/kenji-kk/mucom-go/internal/repository"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
-	"github.com/kenji-kk/mucom-go/pkg/mysql"
+	"github.com/kenji-kk/mucom-go/pkg/db/postgres"
 )
 
 // Injectors from wire.go:
