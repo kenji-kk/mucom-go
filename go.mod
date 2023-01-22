@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/google/uuid v1.3.0
 	github.com/jackc/pgx/v4 v4.17.2
+	go.uber.org/zap v1.24.0
 )
 
 require (
@@ -26,6 +27,8 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
+	go.uber.org/atomic v1.7.0 // indirect
+	go.uber.org/multierr v1.6.0 // indirect
 )
 
 require (

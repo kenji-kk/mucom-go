@@ -1,9 +1,10 @@
 package mysql
 
 import (
-	"fmt"
 	_ "github.com/jackc/pgx/v4/stdlib" // pgx driver
 	"github.com/jmoiron/sqlx"
+
+	"github.com/kenji-kk/mucom-go/pkg/logger"
 )
 
 func NewMysqlDB() (*sqlx.DB) {
@@ -18,7 +19,7 @@ func NewMysqlDB() (*sqlx.DB) {
 		panic(err)
 	}
 
-	fmt.Println("success connecting DB")
+	logger.Logger.Info("success connecting DB")
 
 	return db
 }
