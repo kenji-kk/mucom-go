@@ -31,7 +31,7 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 
 	createdUser, jws, err := haAuth.usAuth.CreateUser(ctx, user)
 	if err != nil || jws == "" {
-		c.JSON(http.StatusBadRequest, err)
+		return c.JSON(http.StatusBadRequest, err)
 	}
 
 	signupResponse := response.SignupResponse{

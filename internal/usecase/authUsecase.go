@@ -30,7 +30,6 @@ func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*
 	// passwordの値を空白にする
 	createdUser.Password = ""
 
-	// JWTの生成
 	jws := createJWT(createdUser.Id.String())
 
 	return createdUser, jws, err

@@ -26,7 +26,6 @@ func NewAuthRepository(db *sqlx.DB) AuthRepository {
 func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
 	u := new(models.User)
 
-	// salt作成
 	salt, err := GenerateSalt()
 	if err != nil {
 		return nil, err
