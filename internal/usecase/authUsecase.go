@@ -2,11 +2,11 @@ package usecase
 
 import (
 	"context"
-	"time"
 	"github.com/dgrijalva/jwt-go"
+	"time"
 
-	"github.com/kenji-kk/mucom-go/internal/repository"
 	"github.com/kenji-kk/mucom-go/internal/models"
+	"github.com/kenji-kk/mucom-go/internal/repository"
 )
 
 type AuthUsecase interface {
@@ -17,7 +17,7 @@ type authUsecase struct {
 	reAuth repository.AuthRepository
 }
 
-func NewAuthUsecase (reAuth repository.AuthRepository) AuthUsecase {
+func NewAuthUsecase(reAuth repository.AuthRepository) AuthUsecase {
 	return &authUsecase{reAuth}
 }
 
@@ -33,11 +33,10 @@ func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*
 	jws := createJWT(createdUser.Id.String())
 
 	return createdUser, jws, err
-	
 
 }
 
-func createJWT(userID string) string{
+func createJWT(userID string) string {
 	// Claimsオブジェクト作成
 	claims := jwt.MapClaims{
 		"user_id": userID,

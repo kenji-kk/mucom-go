@@ -9,8 +9,7 @@ import (
 )
 
 type Server struct {
-	echo     *echo.Echo
-
+	echo *echo.Echo
 }
 
 func NewServer() *Server {
@@ -30,7 +29,7 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) MapHandler(rootHandlers handler.RootHandlers) error {
-	s.echo.POST("/signup",rootHandlers.Signup)
+	s.echo.POST("/signup", rootHandlers.Signup)
 
 	return nil
 }

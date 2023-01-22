@@ -4,11 +4,11 @@ import (
 	"context"
 	"crypto/rand"
 	"github.com/jmoiron/sqlx"
-	"golang.org/x/crypto/bcrypt"
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
 
-	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/const/sql"
+	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/pkg/logger"
 )
 
@@ -52,10 +52,10 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 }
 
 func GenerateSalt() ([]byte, error) {
-  salt := make([]byte, 16)
-  if _, err := rand.Read(salt); err != nil {
+	salt := make([]byte, 16)
+	if _, err := rand.Read(salt); err != nil {
 		logger.Logger.Error("An error occurred while creating the salt", zap.Error(err))
-    return nil, err
-  }
-  return salt, nil
+		return nil, err
+	}
+	return salt, nil
 }
