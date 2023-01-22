@@ -1,18 +1,18 @@
 package repository
 
 import (
-	"fmt"
 	"context"
 	"crypto/rand"
 	"github.com/jmoiron/sqlx"
 	"golang.org/x/crypto/bcrypt"
+	"go.uber.org/zap"
 
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/const/sql"
+	"github.com/kenji-kk/mucom-go/pkg/logger"
 )
 
 type AuthRepository interface {
-	Hello() string
 	CreateUser(context.Context, *models.User) (*models.User, error)
 }
 
@@ -24,14 +24,9 @@ func NewAuthRepository(db *sqlx.DB) AuthRepository {
 	return &authRepository{db}
 }
 
-func (reAuth *authRepository) Hello() string{
-	return "Hello World"
-}
-
 func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
 	u := new(models.User)
 
-	// salt作成
 	salt, err := GenerateSalt()
 	if err != nil {
 		return nil, err
@@ -42,14 +37,14 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 	toHash := append([]byte(user.Password), salt...)
 	hashedPassword, err := bcrypt.GenerateFromPassword(toHash, bcrypt.DefaultCost)
 	if err != nil {
-		fmt.Print("An error occurred while creating the hashedPassword: %v\n", err)
+		logger.Logger.Error("An error occurred while creating the hashedPassword", zap.Error(err))
 		return nil, err
 	}
 	user.HashedPassword = hashedPassword
 
 	// ユーザ作成
 	if err := reAuth.db.QueryRowxContext(ctx, sql.CreateUserQuery, &user.UserName, &user.Email, &user.Salt, &user.HashedPassword).StructScan(u); err != nil {
-		fmt.Print("An error occurred while inserting user-data in DB: %v\n", err)
+		logger.Logger.Error("An error occurred while inserting user-data in DB", zap.Error(err))
 		return nil, err
 	}
 
@@ -59,7 +54,7 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 func GenerateSalt() ([]byte, error) {
   salt := make([]byte, 16)
   if _, err := rand.Read(salt); err != nil {
-		fmt.Printf("An error occurred while creating the salt: %v\n", err)
+		logger.Logger.Error("An error occurred while creating the salt", zap.Error(err))
     return nil, err
   }
   return salt, nil
