@@ -37,14 +37,14 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 	toHash := append([]byte(user.Password), salt...)
 	hashedPassword, err := bcrypt.GenerateFromPassword(toHash, bcrypt.DefaultCost)
 	if err != nil {
-		fmt.Print("An error occurred while creating the hashedPassword: %v\n", err)
+		fmt.Printf("An error occurred while creating the hashedPassword: %v\n", err)
 		return nil, err
 	}
 	user.HashedPassword = hashedPassword
 
 	// ユーザ作成
 	if err := reAuth.db.QueryRowxContext(ctx, sql.CreateUserQuery, &user.UserName, &user.Email, &user.Salt, &user.HashedPassword).StructScan(u); err != nil {
-		fmt.Print("An error occurred while inserting user-data in DB: %v\n", err)
+		fmt.Printf("An error occurred while inserting user-data in DB: %v\n", err)
 		return nil, err
 	}
 
