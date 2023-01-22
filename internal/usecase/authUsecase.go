@@ -10,7 +10,6 @@ import (
 )
 
 type AuthUsecase interface {
-	Hello() string
 	CreateUser(context.Context, *models.User) (*models.User, string, error)
 }
 
@@ -20,10 +19,6 @@ type authUsecase struct {
 
 func NewAuthUsecase (reAuth repository.AuthRepository) AuthUsecase {
 	return &authUsecase{reAuth}
-}
-
-func (usAuth *authUsecase) Hello() string {
-	return usAuth.reAuth.Hello()
 }
 
 func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*models.User, string, error) {

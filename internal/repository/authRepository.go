@@ -12,7 +12,6 @@ import (
 )
 
 type AuthRepository interface {
-	Hello() string
 	CreateUser(context.Context, *models.User) (*models.User, error)
 }
 
@@ -22,10 +21,6 @@ type authRepository struct {
 
 func NewAuthRepository(db *sqlx.DB) AuthRepository {
 	return &authRepository{db}
-}
-
-func (reAuth *authRepository) Hello() string{
-	return "Hello World"
 }
 
 func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
