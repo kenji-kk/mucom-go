@@ -8,7 +8,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/kenji-kk/mucom-go/internal/models"
-	"github.com/kenji-kk/mucom-go/pkg/const/sql"
+	"github.com/kenji-kk/mucom-go/internal/const/sql"
 )
 
 type AuthRepository interface {
@@ -52,8 +52,6 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 		fmt.Print("An error occurred while inserting user-data in DB: %v\n", err)
 		return nil, err
 	}
-
-	fmt.Println(u)
 
 	return u, nil
 }
