@@ -7,7 +7,7 @@ import (
 	"github.com/kenji-kk/mucom-go/pkg/logger"
 )
 
-func NewMysqlDB() (*sqlx.DB) {
+func NewMysqlDB() *sqlx.DB {
 	dataSourceName := "host=postgres port=5432 user=postgres dbname=app_db sslmode=disable password=password"
 
 	db, err := sqlx.Connect("pgx", dataSourceName)

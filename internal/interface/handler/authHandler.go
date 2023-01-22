@@ -1,13 +1,13 @@
 package handler
 
 import (
-	"net/http"
 	"context"
-	"github.com/kenji-kk/mucom-go/internal/usecase"
-	"github.com/labstack/echo"
-	"github.com/kenji-kk/mucom-go/internal/models"
-	"github.com/kenji-kk/mucom-go/pkg/utils"
 	"github.com/kenji-kk/mucom-go/internal/const/rest/response"
+	"github.com/kenji-kk/mucom-go/internal/models"
+	"github.com/kenji-kk/mucom-go/internal/usecase"
+	"github.com/kenji-kk/mucom-go/pkg/utils"
+	"github.com/labstack/echo"
+	"net/http"
 )
 
 type AuthHandler interface {
@@ -35,7 +35,7 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 	}
 
 	signupResponse := response.SignupResponse{
-		createdUser, 
+		createdUser,
 		jws,
 	}
 
