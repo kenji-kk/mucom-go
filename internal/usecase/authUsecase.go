@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 	"github.com/dgrijalva/jwt-go"
-	"time"
-	"golang.org/x/crypto/bcrypt"
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
+	"time"
 
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/repository"
@@ -80,4 +80,3 @@ func createJWT(userID string) string {
 
 	return jws
 }
-

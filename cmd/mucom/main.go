@@ -1,10 +1,7 @@
 package main
 
 import (
-	_ "github.com/go-sql-driver/mysql"
-	_ "github.com/jmoiron/sqlx"
 	"github.com/kenji-kk/mucom-go/internal/server"
-	_ "github.com/labstack/echo/middleware"
 )
 
 func main() {
