@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo"
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/pkg/utils"
+	"github.com/kenji-kk/mucom-go/internal/const/rest/response"
 )
 
 type AuthHandler interface {
@@ -34,10 +35,15 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	createdUser, err := haAuth.usAuth.CreateUser(ctx, user)
-	if err != nil {
+	createdUser, jws, err := haAuth.usAuth.CreateUser(ctx, user)
+	if err != nil || jws == "" {
 		c.JSON(http.StatusBadRequest, err)
 	}
-	
-	return c.JSON(http.StatusCreated, createdUser)
+
+	signupResponse := response.SignupResponse{
+		createdUser, 
+		jws,
+	}
+
+	return c.JSON(http.StatusCreated, signupResponse)
 }
