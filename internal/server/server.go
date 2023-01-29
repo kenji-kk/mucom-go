@@ -30,6 +30,7 @@ func (s *Server) Run() error {
 
 func (s *Server) MapHandler(rootHandlers handler.RootHandlers) error {
 	s.echo.POST("/signup", rootHandlers.Signup)
+	s.echo.POST("/signin", rootHandlers.Signin)
 
 	return nil
 }
