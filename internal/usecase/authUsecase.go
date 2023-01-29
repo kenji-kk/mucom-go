@@ -13,7 +13,7 @@ import (
 )
 
 type AuthUsecase interface {
-	CreateUser(context.Context, *models.User) (*models.User, string, error)
+	Signup(context.Context, *models.User) (*models.User, string, error)
 	Signin(context.Context, *models.User) (*models.User, string, error)
 }
 
@@ -25,7 +25,7 @@ func NewAuthUsecase(reAuth repository.AuthRepository) AuthUsecase {
 	return &authUsecase{reAuth}
 }
 
-func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*models.User, string, error) {
+func (usAuth *authUsecase) Signup(ctx context.Context, user *models.User) (*models.User, string, error) {
 	createdUser, err := usAuth.reAuth.CreateUser(ctx, user)
 	if err != nil {
 		return nil, "", err
