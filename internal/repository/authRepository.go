@@ -14,6 +14,7 @@ import (
 
 type AuthRepository interface {
 	CreateUser(context.Context, *models.User) (*models.User, error)
+	GetUserByEmail(context.Context, *models.User) (*models.User, error)
 }
 
 type authRepository struct {
@@ -45,6 +46,18 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 	// ユーザ作成
 	if err := reAuth.db.QueryRowxContext(ctx, sql.CreateUserQuery, &user.UserName, &user.Email, &user.Salt, &user.HashedPassword).StructScan(u); err != nil {
 		logger.Logger.Error("An error occurred while inserting user-data in DB", zap.Error(err))
+		return nil, err
+	}
+
+	return u, nil
+}
+
+func (reAuth *authRepository) GetUserByEmail(ctx context.Context, user *models.User) (*models.User, error) {
+	u := new(models.User)
+
+	// ユーザ抽出
+	if err := reAuth.db.QueryRowxContext(ctx, sql.ExtractUserByEmailQuery, &user.Email).StructScan(u); err != nil {
+		logger.Logger.Error("An error occurred while extracting user in DB", zap.Error(err))
 		return nil, err
 	}
 

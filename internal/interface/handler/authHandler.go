@@ -12,6 +12,7 @@ import (
 
 type AuthHandler interface {
 	Signup(echo.Context) error
+	Signin(echo.Context) error
 }
 
 type authHandler struct {
@@ -29,7 +30,7 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	createdUser, jws, err := haAuth.usAuth.CreateUser(ctx, user)
+	createdUser, jws, err := haAuth.usAuth.Signup(ctx, user)
 	if err != nil || jws == "" {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -40,4 +41,24 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusCreated, signupResponse)
+}
+
+func (haAuth *authHandler) Signin(c echo.Context) error {
+	ctx := context.Background()
+	user := new(models.User)
+	if err := utils.ReadRequest(c, user); err != nil {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	singinUser, jws, err := haAuth.usAuth.Signin(ctx, user)
+	if err != nil || jws == "" {
+		return c.JSON(http.StatusBadRequest, err)
+	}
+
+	signupResponse := response.SignupResponse{
+		singinUser,
+		jws,
+	}
+
+	return c.JSON(http.StatusOK, signupResponse)
 }
