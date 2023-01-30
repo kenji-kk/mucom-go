@@ -6,7 +6,7 @@ services:
     ports:
       - 8080:8080
     container_name: go
-    command: bash -c "cd /app/api/cmd/mucom && go mod tidy && go run main.go"
+    command: sh -c "go mod tidy && go install github.com/cosmtrek/air@latest && air -c .air.toml"
     depends_on:
       - postgres
     volumes:
