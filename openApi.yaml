@@ -2,54 +2,47 @@
 #  localhost:4010/reviewsで起動できます。
 # 以上でopenApiを起動してください。
 openapi: 3.0.0
+
 info:
   version: 1.0.0
   title: Mucom
   license:
     name: keigo,haruki
+
 servers:
-  - url: http://petstore.swagger.io/
+  - url: http://localhost:8080/
+    description: 開発向けサーバ
+  - url: https://mucom.com/
+    description: 本番向けサーバ()
+
+tags:
+  - name: "reveiw"
+    description: "口コミ取得"
+
 paths:
-  /Reviews:
+  /reviews:
     get:
       summary: List all reviews
       operationId: listReview
       tags:
-        - review
-      parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 20)
-          required: false
-          schema:
-            type: integer
-            format: int32
+        - reveiw
       responses:
         "200":
           description: A paged array of reviews
-          headers:
-            x-next: #なんの設定か不明
-              description: A link to the next page of responses
-              schema:
-                type: string
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Reviews"
+                $ref: "#/components/schemas/reviews"
         default:
           description: unexpected error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/error"
+
 components:
   schemas:
-    Review:
-      required:
-        - id
-        - reviewDate
-        - reviewTitle
-        - reviewInfo
+    review:
       properties:
         id:
           type: integer
@@ -62,14 +55,14 @@ components:
         reviewTitle:
           type: string
           example: "ミセスの曲サイコー"
-        reviewInfo:
+        reviewContent:
           type: string
           example: "ミセスの曲は早いテンポの曲が多くてイケてる"
-    Reviews:
+    reviews:
       type: array
       items:
-        $ref: "#/components/schemas/Review"
-    Error:
+        $ref: "#/components/schemas/review"
+    error:
       required:
         - code
         - message
