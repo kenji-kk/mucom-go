@@ -2,31 +2,30 @@ package usecase
 
 import (
 	"context"
-	"time"
 	"github.com/dgrijalva/jwt-go"
+	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
+	"time"
 
-	"github.com/kenji-kk/mucom-go/internal/repository"
 	"github.com/kenji-kk/mucom-go/internal/models"
+	"github.com/kenji-kk/mucom-go/internal/repository"
+	"github.com/kenji-kk/mucom-go/pkg/logger"
 )
 
 type AuthUsecase interface {
-	Hello() string
-	CreateUser(context.Context, *models.User) (*models.User, string, error)
+	Signup(context.Context, *models.User) (*models.User, string, error)
+	Signin(context.Context, *models.User) (*models.User, string, error)
 }
 
 type authUsecase struct {
 	reAuth repository.AuthRepository
 }
 
-func NewAuthUsecase (reAuth repository.AuthRepository) AuthUsecase {
+func NewAuthUsecase(reAuth repository.AuthRepository) AuthUsecase {
 	return &authUsecase{reAuth}
 }
 
-func (usAuth *authUsecase) Hello() string {
-	return usAuth.reAuth.Hello()
-}
-
-func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*models.User, string, error) {
+func (usAuth *authUsecase) Signup(ctx context.Context, user *models.User) (*models.User, string, error) {
 	createdUser, err := usAuth.reAuth.CreateUser(ctx, user)
 	if err != nil {
 		return nil, "", err
@@ -34,16 +33,39 @@ func (usAuth *authUsecase) CreateUser(ctx context.Context, user *models.User) (*
 
 	// passwordの値を空白にする
 	createdUser.Password = ""
+	createdUser.HashedPassword = []byte{}
 
-	// JWTの生成
 	jws := createJWT(createdUser.Id.String())
 
 	return createdUser, jws, err
-	
 
 }
 
-func createJWT(userID string) string{
+func (usAuth *authUsecase) Signin(ctx context.Context, user *models.User) (*models.User, string, error) {
+	extractedUser, err := usAuth.reAuth.GetUserByEmail(ctx, user)
+	if err != nil {
+		return nil, "", err
+	}
+
+	userPassword := append([]byte(user.Password), extractedUser.Salt...)
+
+	// パスワード比較
+	err = bcrypt.CompareHashAndPassword(extractedUser.HashedPassword, userPassword)
+	if err != nil {
+		logger.Logger.Error("An error occurred while comparing passward", zap.Error(err))
+		return nil, "", err
+	}
+
+	// passwordの値を空白にする
+	extractedUser.Password = ""
+	extractedUser.HashedPassword = []byte{}
+
+	jws := createJWT(user.Id.String())
+
+	return extractedUser, jws, err
+}
+
+func createJWT(userID string) string {
 	// Claimsオブジェクト作成
 	claims := jwt.MapClaims{
 		"user_id": userID,
