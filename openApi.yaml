@@ -1,0 +1,74 @@
+# docker run --rm -it -p 4010:4010 -v $PWD:/tmp stoplight/prism:3 mock -h 0.0.0.0 /tmp/openapi.yaml
+#  localhost:4010/reviewsで起動できます。
+# 以上でopenApiを起動してください。
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Mucom
+  license:
+    name: keigo,haruki
+
+servers:
+  - url: http://localhost:8080/
+    description: 開発向けサーバ
+  - url: https://mucom.com/
+    description: 本番向けサーバ()
+
+tags:
+  - name: "reveiw"
+    description: "口コミ取得"
+
+paths:
+  /reviews:
+    get:
+      summary: List all reviews
+      operationId: listReview
+      tags:
+        - reveiw
+      responses:
+        "200":
+          description: A paged array of reviews
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/reviews"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/error"
+
+components:
+  schemas:
+    review:
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        reviewDate:
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+        reviewTitle:
+          type: string
+          example: "ミセスの曲サイコー"
+        reviewContent:
+          type: string
+          example: "ミセスの曲は早いテンポの曲が多くてイケてる"
+    reviews:
+      type: array
+      items:
+        $ref: "#/components/schemas/review"
+    error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
