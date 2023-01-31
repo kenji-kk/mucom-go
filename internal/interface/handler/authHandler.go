@@ -6,7 +6,7 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/pkg/utils"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 

@@ -1,7 +1,8 @@
 package server
 
 import (
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/kenji-kk/mucom-go/internal/injection"
 	"github.com/kenji-kk/mucom-go/internal/interface/handler"
@@ -29,6 +30,9 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) MapHandler(rootHandlers handler.RootHandlers) error {
+	s.echo.Use(middleware.Recover())
+	s.echo.Use(middleware.Logger())
+
 	s.echo.POST("/signup", rootHandlers.Signup)
 	s.echo.POST("/signin", rootHandlers.Signin)
 
