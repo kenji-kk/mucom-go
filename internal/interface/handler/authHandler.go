@@ -2,7 +2,7 @@ package handler
 
 import (
 	"context"
-	"github.com/kenji-kk/mucom-go/internal/const/rest/response"
+	"github.com/kenji-kk/mucom-go/internal/const/rest/cookie"
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/pkg/utils"
@@ -35,12 +35,10 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	signupResponse := response.SignupResponse{
-		createdUser,
-		jws,
-	}
+	utils.WriteCookie(c, cookie.JWSCookieName, jws, 1)
 
-	return c.JSON(http.StatusCreated, signupResponse)
+
+	return c.JSON(http.StatusCreated, createdUser)
 }
 
 func (haAuth *authHandler) Signin(c echo.Context) error {
@@ -55,10 +53,7 @@ func (haAuth *authHandler) Signin(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
-	signupResponse := response.SignupResponse{
-		singinUser,
-		jws,
-	}
+	utils.WriteCookie(c, cookie.JWSCookieName, jws, 1)
 
-	return c.JSON(http.StatusOK, signupResponse)
+	return c.JSON(http.StatusOK, singinUser)
 }
