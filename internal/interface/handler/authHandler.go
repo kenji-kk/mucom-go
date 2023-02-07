@@ -2,12 +2,13 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/kenji-kk/mucom-go/internal/const/rest/cookie"
 	"github.com/kenji-kk/mucom-go/internal/models"
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/pkg/utils"
 	"github.com/labstack/echo/v4"
-	"net/http"
 )
 
 type AuthHandler interface {
@@ -36,7 +37,6 @@ func (haAuth *authHandler) Signup(c echo.Context) error {
 	}
 
 	utils.WriteCookie(c, cookie.JWSCookieName, jws, 1)
-
 
 	return c.JSON(http.StatusCreated, createdUser)
 }
