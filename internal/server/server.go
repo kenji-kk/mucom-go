@@ -35,6 +35,7 @@ func (s *Server) MapHandler(rootHandlers handler.RootHandlers) error {
 
 	s.echo.POST("/signup", rootHandlers.Signup)
 	s.echo.POST("/signin", rootHandlers.Signin)
+	s.echo.GET("/reviews", rootHandlers.GetReviews)
 
 	return nil
 }

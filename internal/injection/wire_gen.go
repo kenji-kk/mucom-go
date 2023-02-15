@@ -20,6 +20,7 @@ func InitializeRootHandlers() handler.RootHandlers {
 	authRepository := repository.NewAuthRepository(db)
 	authUsecase := usecase.NewAuthUsecase(authRepository)
 	authHandler := handler.NewAuthHandler(authUsecase)
-	rootHandlers := handler.NewRootHandlers(authHandler)
+	reviewHandler := handler.NewReviewHandler()
+	rootHandlers := handler.NewRootHandlers(authHandler, reviewHandler)
 	return rootHandlers
 }

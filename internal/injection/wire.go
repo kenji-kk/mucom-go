@@ -17,10 +17,10 @@ func InitializeRootHandlers() handler.RootHandlers {
 		// handler
 		handler.NewRootHandlers,
 		handler.NewAuthHandler,
+		handler.NewReviewHandler,
 
 		// usecase
 		usecase.NewAuthUsecase,
-
 		// repository
 		repository.NewAuthRepository,
 

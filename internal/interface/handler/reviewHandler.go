@@ -1,24 +1,28 @@
 package handler
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/kenji-kk/mucom-go/internal/models"
-	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/labstack/echo/v4"
 )
 
 type ReviewHandler interface {
 	// CheckToken(echo.Context) error
-	GetReviews(echo.Context) *models.ReviewResultEntity
+	GetReviews(echo.Context) error
 }
 type reviewHnadler struct {
-	usReview usecase.ReveiwUsecase
+	// usReview usecase.ReveiwUsecase
 }
 
-func NewReviewHandler(usAuth usecase.ReveiwUsecase) ReviewHandler {
-	// usReview :=
-	// return &ReviewHandler{usReview}
+func NewReviewHandler() ReviewHandler {
+	return &reviewHnadler{}
 }
 
-func (haReview *reviewHnadler) GetReviews(c echo.Context) *models.ReviewResultEntity {
-	return &models.ReviewResultEntity{Reviews: []string{"item1", "item2", "item3"}, Error: nil}
+func (haReview *reviewHnadler) GetReviews(c echo.Context) error {
+	log.Print("-- --reviews-- --")
+	reviewResult := &models.ReviewResultEntity{Reviews: []string{"item1", "item2", "item3"}, Error: nil}
+	return c.JSON(http.StatusOK, reviewResult)
+
 }
