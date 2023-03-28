@@ -9,6 +9,7 @@ import (
 	"github.com/kenji-kk/mucom-go/internal/usecase"
 	"github.com/kenji-kk/mucom-go/pkg/utils"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type AuthHandler interface {
@@ -25,6 +26,7 @@ func NewAuthHandler(usAuth usecase.AuthUsecase) AuthHandler {
 }
 
 func (haAuth *authHandler) Signup(c echo.Context) error {
+	log.Print("-- -- singUp -- -- --")
 	ctx := context.Background()
 	user := new(models.User)
 	if err := utils.ReadRequest(c, user); err != nil {
@@ -47,7 +49,7 @@ func (haAuth *authHandler) Signin(c echo.Context) error {
 	if err := utils.ReadRequest(c, user); err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-
+	log.Print("singin処理開始前")
 	singinUser, jws, err := haAuth.usAuth.Signin(ctx, user)
 	if err != nil || jws == "" {
 		return c.JSON(http.StatusBadRequest, err)

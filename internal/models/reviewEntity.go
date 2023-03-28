@@ -1,6 +1,7 @@
 package models
 
 type ReviewResultEntity struct {
-	Reviews []string
-	Error   error
+	Id      int
+	Title   string
+	Content string
 }

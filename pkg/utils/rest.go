@@ -3,6 +3,7 @@ package utils
 import (
 	"net/http"
 	"time"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,7 +21,6 @@ func WriteCookie(c echo.Context, cookieName, cookievalue string, expiresTime tim
 		Expires:  time.Now().Add(expiresTime * time.Hour),
 		HttpOnly: true,
 	}
-	
-  c.SetCookie(cookie)
-  return nil
+	c.SetCookie(cookie)
+	return nil
 }

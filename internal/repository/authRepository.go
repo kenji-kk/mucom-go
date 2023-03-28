@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"crypto/rand"
+
 	"github.com/jmoiron/sqlx"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
@@ -35,6 +36,7 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 	user.Salt = salt
 
 	// hashPassword作成
+	logger.Logger.Debug("--create hashPassword--")
 	toHash := append([]byte(user.Password), salt...)
 	hashedPassword, err := bcrypt.GenerateFromPassword(toHash, bcrypt.DefaultCost)
 	if err != nil {
@@ -55,7 +57,7 @@ func (reAuth *authRepository) CreateUser(ctx context.Context, user *models.User)
 func (reAuth *authRepository) GetUserByEmail(ctx context.Context, user *models.User) (*models.User, error) {
 	u := new(models.User)
 
-	// ユーザ抽出
+	logger.Logger.Debug("--user selection--")
 	if err := reAuth.db.QueryRowxContext(ctx, sql.ExtractUserByEmailQuery, &user.Email).StructScan(u); err != nil {
 		logger.Logger.Error("An error occurred while extracting user in DB", zap.Error(err))
 		return nil, err
